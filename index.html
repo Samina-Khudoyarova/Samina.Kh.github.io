@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İzmir Mood-Sync | Soft Pastel Navigator</title>
+    <style>
+        :root {
+            --soft-lavender: #E0DEFF;
+            --soft-rose: #FFDEE9;
+            --soft-mint: #E0FFF0;
+            --soft-sky: #E0F2FF;
+            --soft-lemon: #FFF9E0;
+            --text-color: #6B6B8E;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        body {
+            background-color: var(--soft-rose);
+            background-image: radial-gradient(circle at 20% 30%, var(--soft-sky) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, var(--soft-lavender) 0%, transparent 40%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        #app-container {
+            width: 100%;
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 8px solid var(--white);
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            font-weight: 900;
+            color: #8E8EAF;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .tagline {
+            background: var(--white);
+            color: #A0A0C0;
+            display: inline-block;
+            padding: 6px 18px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+            animation: softFade 0.6s ease-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes softFade {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .question-box {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 800;
+            background: var(--white);
+            color: #7A7A9A;
+            padding: 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #8E8EAF;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+
+        .btn-yes {
+            background: var(--soft-mint);
+        }
+
+        .btn-no {
+            background: var(--soft-sky);
+        }
+
+        .btn-start {
+            background: var(--soft-lavender);
+            grid-column: span 2;
+            padding: 25px;
+        }
+
+        button:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Result View */
+        .result-view {
+            text-align: center;
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--soft-lemon);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 249, 224, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 249, 224, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 249, 224, 0); }
+        }
+
+        .result-name {
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            font-weight: 900;
+            color: #7A7A9A;
+            background: linear-gradient(to bottom, #7A7A9A, #A0A0C0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .reset-btn {
+            background: var(--white);
+            width: 100%;
+            border: 2px solid var(--soft-lavender);
+            margin-top: 10px;
+        }
+
+        @media (max-width: 500px) {
+            .btn-group { grid-template-columns: 1fr; }
+            #app-container { padding: 25px; border-radius: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <main id="app-container">
+        <header>
+            <h1>İZMİR MOOD-SYNC</h1>
+            <div class="tagline">FOR STUDENTS ☁️ BY STUDENTS</div>
+        </header>
+
+        <!-- Start Screen -->
+        <div id="screen-start" class="screen active">
+            <div class="question-box">READY TO FIND YOUR CLOUD IN THE CITY?</div>
+            <button class="btn-start" onclick="navigateTo('q-energy')">LET'S START</button>
+        </div>
+
+        <!-- Q: Energy -->
+        <div id="q-energy" class="screen">
+            <div class="question-box">FEELING HIGH ENERGY?</div>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="handleChoice('energy', true)">YES</button>
+                <button class="btn-no" onclick="handleChoice('energy', false)">NO</button>
+            </div>
+        </div>
+
+        <!-- Q: Mood -->
+        <div id="q-mood" class="screen">
+            <div class="question-box">ARE YOU IN A SOCIAL MOOD?</div>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="handleChoice('mood', true)">YES</button>
+                <button class="btn-no" onclick="handleChoice('mood', false)">NO</button>
+            </div>
+        </div>
+
+        <!-- Q: Budget -->
+        <div id="q-budget" class="screen">
+            <div class="question-box">IS YOUR BUDGET HIGH?</div>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="handleChoice('budget', true)">YES</button>
+                <button class="btn-no" onclick="handleChoice('budget', false)">NO</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="screen-result" class="screen result-view">
+            <div class="result-icon">✨</div>
+            <div class="tagline" style="margin-bottom: 10px;">YOU SHOULD VISIT:</div>
+            <div id="result-name" class="result-name">LOCATION</div>
+            <button class="reset-btn" onclick="resetApp()">RE-SYNC</button>
+        </div>
+    </main>
+
+    <script>
+        const state = { energy: null, mood: null, budget: null };
+
+        const results = {
+            R1: "Alsancak Bar Street",
+            R2: "Bostanlı Sunset Steps",
+            R3: "Kemeraltı Courtyards",
+            R4: "Kordon Chill"
+        };
+
+        function navigateTo(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function handleChoice(key, value) {
+            state[key] = value;
+            if (key === 'energy') navigateTo('q-mood');
+            else if (key === 'mood') navigateTo('q-budget');
+            else if (key === 'budget') calculateResult();
+        }
+
+        function calculateResult() {
+            let rKey = "";
+            if (state.energy === true) {
+                if (state.mood === true) {
+                    rKey = state.budget ? "R1" : "R4";
+                } else {
+                    rKey = state.budget ? "R3" : "R2";
+                }
+            } else {
+                rKey = state.budget ? "R3" : "R2";
+            }
+            document.getElementById('result-name').innerText = results[rKey];
+            navigateTo('screen-result');
+        }
+
+        function resetApp() {
+            state.energy = state.mood = state.budget = null;
+            navigateTo('screen-start');
+        }
+    </script>
+</body>
+</html>
